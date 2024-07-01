@@ -1,7 +1,7 @@
 const { mostrarTarea } = require('./tarea');
 
 const agregarTarea = (listaDeTareas, tarea) => {
-    listaDeTareas.push(tarea);
+    return [...listaDeTareas, tarea];
 };
 
 const buscarPorTitulo = (listaDeTareas, titulo) => {

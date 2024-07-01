@@ -1,6 +1,7 @@
 const readline = require('readline-sync');
 const { crearTarea, mostrarDetallesTarea, cambiarDescripcion, cambiarEstado, cambiarDificultad, cambiarVencimiento} = require('./tarea');
 const { agregarTarea, buscarPorTitulo, mostrarListadoTareas, obtenerTareasPorEstado} = require('./manejadorListaTareas');
+const {esFechaValida} = require('./utils')
 
 const verTareasMENU = (listaDeTareas) => {
     console.clear();
@@ -71,31 +72,36 @@ const agregarTareaMENU = (listaDeTareas) => {
     console.log('Vamos a agregar una tarea');
     const titulo = readline.question('Titulo: ');
     const descripcion = readline.question('Descripcion: ');
-    const estado = readline.question(
-        'Estado (Pendiente, En curso, Terminada, Cancelada): '
-    );
-    const dificultad = readline.question(
-        'Dificultad (Facil, Medio, Dificil): '
-    );
-    const vencimiento = readline.question(
-        'Fecha de vencimiento (YYYY-MM-DD): '
-    );
+    const estado = readline.question('Estado (Pendiente, En curso, Terminada, Cancelada): ');
+    const dificultad = readline.question('Dificultad (Facil, Medio, Dificil): ');
+    const vencimiento = readline.question('Fecha de vencimiento (YYYY-MM-DD): ');
+
+    let fechaVencimiento = null;
+    if (vencimiento && esFechaValida(vencimiento)) {
+        fechaVencimiento = vencimiento;
+    } else if (vencimiento) {
+        console.log('Fecha no valida, se dejara en blanco.');
+    }
 
     try {
         const tarea = crearTarea(
             titulo,
             descripcion,
             estado,
-            vencimiento,
+            fechaVencimiento,
             dificultad
         );
-        agregarTarea(listaDeTareas, tarea);
+        const nuevaListaDeTareas = agregarTarea(listaDeTareas, tarea);
         console.log('Tarea creada con exito');
+        readline.question('Presiona cualquier tecla para continuar...');
+        return nuevaListaDeTareas;
     } catch (error) {
         console.log(`Error al crear la tarea: ${error.message}`);
+        readline.question('Presiona cualquier tecla para continuar...');
+        return listaDeTareas;
     }
 
-    readline.question('Presiona cualquier tecla para continuar...');
+    
 };
 
 const mostrarTareasPorEstado = (listaDeTareas, estado) => {

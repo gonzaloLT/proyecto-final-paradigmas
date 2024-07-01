@@ -23,7 +23,7 @@ const tarea2 = {
     dificultad: 'Facil',
 };
 
-const listaDeTareas = [tarea1, tarea2];
+let listaDeTareas = [tarea1, tarea2];
 
 const menuPrincipal = () => {
     console.log('¿Que deseas hacer?');
@@ -40,7 +40,7 @@ const menuPrincipal = () => {
 
 const main = () => {
     console.clear()
-    opcion = menuPrincipal();
+    let opcion = menuPrincipal();
 
     switch (opcion) {
         case '1':
@@ -50,7 +50,7 @@ const main = () => {
             buscarTareaMENU(listaDeTareas);
             break;
         case '3':
-            agregarTareaMENU(listaDeTareas);
+            listaDeTareas = agregarTareaMENU(listaDeTareas);
             break;
         case '0':
             console.log('Hasta luego')
