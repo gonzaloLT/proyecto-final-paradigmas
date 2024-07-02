@@ -4,45 +4,53 @@ const {formatearFecha} = require('./utils')
 const crearTarea = (
     titulo,
     descripcion = '',
-    estado = 'Pendiente',
+    estado,
     fechaVencimiento = null,
-    dificultad = 'Facil'
+    dificultad
 ) => {
     if (!titulo.trim()) {
         throw new Error('El titulo no puede estar vacio');
     }
+
+    const estadosValidos = ['pendiente', 'en curso', 'terminada', 'cancelada'];
+
+    let estadoAjustado = estadosValidos.includes(estado.toLowerCase()) ? estado.toLowerCase() : 'pendiente';
+
+    const dificultadesValidas = ['facil', 'medio', 'dificil'];
+
+    let dificultadAjustada = dificultadesValidas.includes(dificultad.toLowerCase()) ? dificultad.toLowerCase() : 'facil';
 
     const now = new Date();
     return {
         id: Date.now(),
         titulo,
         descripcion,
-        estado,
+        estado: estadoAjustado,
         fechaCreacion: now,
         ultimaEdicion: now,
         fechaVencimiento,
-        dificultad,
+        dificultad: dificultadAjustada,
     };
 };
 
 //Funcion pura para cambiar el estado de una tarea
 const cambiarEstado = (tarea, nuevoEstado) => {
-    const estadosValidos = ['Pendiente', 'En curso', 'Terminada', 'Cancelada'];
+    const estadosValidos = ['pendiente', 'en curso', 'terminada', 'cancelada'];
 
-    if (estadosValidos.includes(nuevoEstado)) {
-        return { ...tarea, estado: nuevoEstado, ultimaEdicion: new Date() };
+    if (estadosValidos.includes(nuevoEstado.toLowerCase())) {
+        return { ...tarea, estado: nuevoEstado.toLowerCase(), ultimaEdicion: new Date() };
     }
     throw new Error('Estado no valido');
 };
 
 //Funcion pura para cambiar dificultad de una tarea
 const cambiarDificultad = (tarea, nuevaDificultad) => {
-    const dificultadesValidas = ['Facil', 'Medio', 'Dificil'];
+    const dificultadesValidas = ['facil', 'medio', 'dificil'];
 
-    if (dificultadesValidas.includes(nuevaDificultad)) {
+    if (dificultadesValidas.includes(nuevaDificultad.toLowerCase())) {
         return {
             ...tarea,
-            dificultad: nuevaDificultad,
+            dificultad: nuevaDificultad.toLowerCase(),
             ultimaEdicion: new Date(),
         };
     }
@@ -75,9 +83,9 @@ const mostrarTarea = (tarea, indice) => {
 //Funcion pura para mostrar una tarea en detalle
 const mostrarDetallesTarea = (tarea) => {
     const dificultadEmoji = {
-        Facil: '⭐',
-        Medio: '⭐⭐',
-        Dificil: '⭐⭐⭐',
+        facil: '⭐',
+        medio: '⭐⭐',
+        dificil: '⭐⭐⭐',
     };
 
     console.log(`${tarea.titulo}`);

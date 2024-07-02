@@ -72,8 +72,8 @@ const agregarTareaMENU = (listaDeTareas) => {
     console.log('Vamos a agregar una tarea');
     const titulo = readline.question('Titulo: ');
     const descripcion = readline.question('Descripcion: ');
-    const estado = readline.question('Estado (Pendiente, En curso, Terminada, Cancelada): ');
-    const dificultad = readline.question('Dificultad (Facil, Medio, Dificil): ');
+    const estado = readline.question('Estado (pendiente, en curso, terminada, cancelada): ').toLowerCase();
+    const dificultad = readline.question('Dificultad (facil, medio, dificil): ').toLowerCase();
     const vencimiento = readline.question('Fecha de vencimiento (YYYY-MM-DD): ');
 
     let fechaVencimiento = null;
@@ -105,7 +105,7 @@ const agregarTareaMENU = (listaDeTareas) => {
 };
 
 const mostrarTareasPorEstado = (listaDeTareas, estado) => {
-    const tareas = obtenerTareasPorEstado(listaDeTareas, estado);
+    const tareas = obtenerTareasPorEstado(listaDeTareas, estado.toLowerCase());
     if (tareas.length === 0) {
         console.log(`No hay tareas ${estado.toLowerCase()}`);
     } else {
@@ -134,7 +134,10 @@ const gestionarDetallesTarea = (listaDeTareas, tareas = listaDeTareas) => {
 
         if (editar.toLowerCase() === 'e') {
             const tareaActualizada = editarTarea(tareas[indice]);
-            tareas[indice] = tareaActualizada;
+            const indiceEnListaDeTareas = listaDeTareas.findIndex(t => t.id === tareaActualizada.id);
+            if (indiceEnListaDeTareas !== -1) {
+                listaDeTareas[indiceEnListaDeTareas] = tareaActualizada;
+            }
         }
     }
 };
@@ -147,8 +150,8 @@ const editarTarea = (tarea) => {
     console.log('');
 
     const nuevaDescripcion = readline.question('1. Ingresa la descripcion: ');
-    const nuevoEstado = readline.question('2. Estado (Pendiente, En curso, Terminada, Cancelada): ');
-    const nuevaDificultad = readline.question('3. Dificultad (Facil, Medio, Dificil): ');
+    const nuevoEstado = readline.question('2. Estado (pendiente, en curso, terminada, cancelada): ');
+    const nuevaDificultad = readline.question('3. Dificultad (facil, medio, dificil): ');
     const nuevoVencimiento = readline.question('4. Vencimiento (YYYY-MM-DD): ');
 
     try {
@@ -161,11 +164,13 @@ const editarTarea = (tarea) => {
             );
         }
 
-        if (nuevoEstado.trim()) {
+        const estadosValidos = ['pendiente', 'en curso', 'terminada', 'cancelada'];
+        if (nuevoEstado && estadosValidos.includes(nuevoEstado)) {
             tareaActualizada = cambiarEstado(tareaActualizada, nuevoEstado.trim());
         }
 
-        if (nuevaDificultad.trim()) {
+        const dificultadesValidas = ['facil', 'medio', 'dificil'];
+        if (nuevaDificultad && dificultadesValidas.includes(nuevaDificultad)) {
             tareaActualizada = cambiarDificultad(tareaActualizada, nuevaDificultad.trim());
         }
 

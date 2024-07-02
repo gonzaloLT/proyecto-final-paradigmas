@@ -5,22 +5,22 @@ const tarea1 = {
     id: 1,
     titulo: 'aprender CSS',
     descripcion: 'Estoy aprendiendo CSS',
-    estado: 'En Curso',
+    estado: 'en curso',
     fechaCreacion: new Date(),
     ultimaEdicion: new Date(),
     fechaVencimiento: null,
-    dificultad: 'Medio',
+    dificultad: 'medio',
 };
 
 const tarea2 = {
     id: 2,
     titulo: 'aprender HTML',
     descripcion: 'Estoy aprendiendo html',
-    estado: 'Pendiente',
+    estado: 'pendiente',
     fechaCreacion: new Date(),
     ultimaEdicion: new Date(),
     fechaVencimiento: null,
-    dificultad: 'Facil',
+    dificultad: 'facil',
 };
 
 let listaDeTareas = [tarea1, tarea2];
